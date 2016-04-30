@@ -19,7 +19,7 @@ class Urlmap extends ActiveRecord\Model { }
  * @return string Random string.
  * via: https://gist.github.com/sepehr/3371339
  */
-function readable_random_string($length = 6)
+function readable_random_string($length = 4)
 {  
     $string     = '';
     $vowels     = array("a","e","i","o","u");  
@@ -54,20 +54,28 @@ function scheme_host_port($server) {
 
 $path_pieces = explode("/", $_SERVER["REQUEST_URI"]);
 
-if ($path_pieces[2] == "until") { // for paths like /until/someotherpath, create a new url mapping
-  $map = Urlmap::create(array('target' => $path_pieces[3], 'source' => readable_random_string()));
-  $map->save();
-  
-  print scheme_host_port($_SERVER).'/u/'.$map->source;
-}
-
 if ($path_pieces[2] == "u") { // for paths like /u/abcdef, look up an already existing record and redirect
   $map = Urlmap::find_by_source($path_pieces[3]);
   if ($map) {
+    // TODO: check for expiry
     header('Location: '.scheme_host_port($_SERVER).'/'.$map->target);
   } else {
     http_response_code(404);
     print 'No such short URL.';
   }
+}
+
+// for paths like /until6pm/someotherpath, create a new url mapping
+if (preg_match('/\/until([a-z0-9]+)\/(.+)/', $_SERVER["REQUEST_URI"], $matches)) { 
+  $expiry = new DateTime($matches[1]);
+  // TODO: check the random string against the database to avoid collisions
+  $map = Urlmap::create(array(
+    'target' => $matches[2], 
+    'source' => readable_random_string(), 
+    'expiry' => $expiry->format('c'))
+  );
+  $map->save();
+  
+  print scheme_host_port($_SERVER).'/u/'.$map->source;
 }
 ?>
