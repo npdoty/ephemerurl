@@ -64,18 +64,50 @@ if ($path_pieces[2] == "u") { // for paths like /u/abcdef, look up an already ex
     print 'No such short URL.';
   }
 }
-
+?>
+<!DOCTYPE html>
+<head>
+  <title>npdoty.name ephemerurl</title>
+  <style type="text/css" media="screen">
+  body {
+    font-size: 18px;
+  }
+  .url {
+    font-family: monospace;
+  }
+  .aside {
+    padding: 10px 0px 10px 40px;
+  }
+  
+  div.success {
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 100px;
+    padding: 10px 20px 10px 20px;
+    border: 3px solid darkgreen;
+  }
+  </style>
+</head>
+<body>
+<?php
 // for paths like /until6pm/someotherpath, create a new url mapping
+// TODO: also handle patterns like /for20minutes/ and maybe /forever/
 if (preg_match('/\/until([a-z0-9]+)\/(.+)/', $_SERVER["REQUEST_URI"], $matches)) { 
   $expiry = new DateTime($matches[1]);
   // TODO: check the random string against the database to avoid collisions
   $map = Urlmap::create(array(
     'target' => $matches[2], 
     'source' => readable_random_string(), 
-    'expiry' => $expiry->format('c'))
-  );
+    'expiry' => $expiry->format('c')
+  ));
   $map->save();
-  
-  print scheme_host_port($_SERVER).'/u/'.$map->source;
+  ?>
+  <div class="success">
+    <p>Okay, Nick, here's an ephemeral URL you can use:</p>
+    <p class="aside"><strong class="url"><?=scheme_host_port($_SERVER).'/u/'.$map->source ?></strong></p>
+    <p>Until <strong class="datetime"><?=$expiry->format('c')?></strong> (when it becomes <span class="url">410 Gone</span>), that will redirect to <strong class="url"><?=scheme_host_port($_SERVER).'/u/'.$map->target ?></strong>.</p>
+  </div>
+  <?php
 }
 ?>
