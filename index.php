@@ -72,6 +72,9 @@ if ($path_pieces[2] == "u") { // for paths like /u/abcdef, look up an already ex
   body {
     font-size: 18px;
   }
+  body.success {
+    background-color: lightgreen;
+  }
   .url {
     font-family: monospace;
   }
@@ -84,12 +87,12 @@ if ($path_pieces[2] == "u") { // for paths like /u/abcdef, look up an already ex
     margin-left: auto;
     margin-right: auto;
     margin-top: 100px;
-    padding: 10px 20px 10px 20px;
+    padding: 10px 30px 10px 30px;
     border: 3px solid darkgreen;
+    background-color: white;
   }
   </style>
 </head>
-<body>
 <?php
 // for paths like /until6pm/someotherpath, create a new url mapping
 // TODO: also handle patterns like /for20minutes/ and maybe /forever/
@@ -103,11 +106,13 @@ if (preg_match('/\/until([a-z0-9]+)\/(.+)/', $_SERVER["REQUEST_URI"], $matches))
   ));
   $map->save();
   ?>
+<body class="success">
   <div class="success">
     <p>Okay, Nick, here's an ephemeral URL you can use:</p>
     <p class="aside"><strong class="url"><?=scheme_host_port($_SERVER).'/u/'.$map->source ?></strong></p>
     <p>Until <strong class="datetime"><?=$expiry->format('c')?></strong> (when it becomes <span class="url">410 Gone</span>), that will redirect to <strong class="url"><?=scheme_host_port($_SERVER).'/u/'.$map->target ?></strong>.</p>
   </div>
+</body>
   <?php
 }
 ?>
