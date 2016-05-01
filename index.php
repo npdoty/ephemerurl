@@ -97,7 +97,7 @@ if ($path_pieces[2] == "u") { // for paths like /u/abcdef, look up an already ex
 // for paths like /until6pm/someotherpath, create a new url mapping
 // TODO: also handle patterns like /for20minutes/ and maybe /forever/
 if (preg_match('/\/until([a-z0-9]+)\/(.+)/', $_SERVER["REQUEST_URI"], $matches)) { 
-  $expiry = new DateTime($matches[1]);
+  $expiry = new DateTime($matches[1]);  // TODO: error handling if string doesn't translate to a time
   // TODO: check the random string against the database to avoid collisions
   $map = Urlmap::create(array(
     'target' => $matches[2], 
@@ -105,6 +105,8 @@ if (preg_match('/\/until([a-z0-9]+)\/(.+)/', $_SERVER["REQUEST_URI"], $matches))
     'expiry' => $expiry->format('c')
   ));
   $map->save();
+  
+  // TODO: handle escaping, or risk security XSS vulnerability
   ?>
 <body class="success">
   <div class="success">
