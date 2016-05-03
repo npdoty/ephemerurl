@@ -55,7 +55,7 @@ function scheme_host_port($server) {
 $success = False;
 $error = False;
 $error_message = '';
-$path_pieces = explode("/", $_SERVER["REQUEST_URI"]);
+$path_pieces = explode("/", $_SERVER["REQUEST_URI"]); // TODO: replace with a regex
 
 if ($path_pieces[2] == "u") { // for paths like /u/abcdef, look up an already existing record and redirect
   $map = Urlmap::find_by_source($path_pieces[3]);
@@ -114,16 +114,22 @@ if ($path_pieces[2] == "u") { // for paths like /u/abcdef, look up an already ex
 <?php
 // for paths like /until6pm/someotherpath, create a new url mapping
 // TODO: also handle patterns like /for20minutes/ and maybe /forever/
-if (preg_match('/\/until([a-z0-9]+)\/(.+)/', $_SERVER["REQUEST_URI"], $matches)) { 
-  $expiry = new DateTime($matches[1]);  // TODO: error handling if string doesn't translate to a time
-  // TODO: check the random string against the database to avoid collisions
-  $map = Urlmap::create(array(
-    'target' => $matches[2], 
-    'source' => readable_random_string(), 
-    'expiry' => $expiry->format('c')
-  ));
-  $map->save();
-  $success = True;
+if (preg_match('/\/until([a-z:0-9]+)\/(.+)/', $_SERVER["REQUEST_URI"], $matches)) { 
+  try {
+    $expiry = new DateTime($matches[1]);
+    // TODO: check the random string against the database to avoid collisions
+    // TODO: times in the past don't make sense and a probably an error
+    $map = Urlmap::create(array(
+      'target' => $matches[2], 
+      'source' => readable_random_string(), 
+      'expiry' => $expiry->format('c')
+    ));
+    $map->save();
+    $success = True;
+  } catch (Exception $e) {
+    $error = True;
+    $error_message = $e->getMessage();
+  }
 }
   // TODO: handle escaping, or risk security XSS vulnerability
 if ($success) {
