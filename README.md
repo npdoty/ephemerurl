@@ -4,3 +4,7 @@ Ephemerurls are ephemeral redirection URLs, which only function for a limited pe
 
 * create .htaccess / mod_rewrite rules
 * create standalone .sql file to create the sqlite database
+
+### Security
+
+I couldn't successfully execute a trivial XSS attack, but I would welcome reports that such attacks are possible or recommendations for code to give stronger assurances that they aren't possible. Proof of concepts are great, but please don't intentionally do harm to users.
