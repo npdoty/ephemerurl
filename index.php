@@ -52,6 +52,9 @@ function scheme_host_port($server) {
   return $scheme.$host.$port;
 }
 
+$success = False;
+$error = False;
+$error_message = '';
 $path_pieces = explode("/", $_SERVER["REQUEST_URI"]);
 
 if ($path_pieces[2] == "u") { // for paths like /u/abcdef, look up an already existing record and redirect
@@ -59,9 +62,11 @@ if ($path_pieces[2] == "u") { // for paths like /u/abcdef, look up an already ex
   if ($map) {
     // TODO: check for expiry
     header('Location: '.scheme_host_port($_SERVER).'/'.$map->target);
+    exit; // no content after Location headers are sent
   } else {
     http_response_code(404);
-    print 'No such short URL.';
+    $error = True;
+    $error_message = 'No such short URL.';
   }
 }
 ?>
@@ -74,6 +79,9 @@ if ($path_pieces[2] == "u") { // for paths like /u/abcdef, look up an already ex
   }
   body.success {
     background-color: lightgreen;
+  }
+  body.error {
+    background-color: pink;
   }
   .url {
     font-family: monospace;
@@ -91,6 +99,16 @@ if ($path_pieces[2] == "u") { // for paths like /u/abcdef, look up an already ex
     border: 3px solid darkgreen;
     background-color: white;
   }
+  
+  div.error {
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 100px;
+    padding: 10px 30px 10px 30px;
+    border: 3px solid darkred;
+    background-color: white;
+  }
   </style>
 </head>
 <?php
@@ -105,16 +123,27 @@ if (preg_match('/\/until([a-z0-9]+)\/(.+)/', $_SERVER["REQUEST_URI"], $matches))
     'expiry' => $expiry->format('c')
   ));
   $map->save();
-  
+  $success = True;
+}
   // TODO: handle escaping, or risk security XSS vulnerability
-  ?>
+if ($success) {
+?>
 <body class="success">
   <div class="success">
     <p>Okay, Nick, here's an ephemeral URL you can use:</p>
     <p class="aside"><strong class="url"><?=scheme_host_port($_SERVER).'/u/'.$map->source ?></strong></p>
-    <p>Until <strong class="datetime"><?=$expiry->format('c')?></strong> (when it becomes <span class="url">410 Gone</span>), that will redirect to <strong class="url"><?=scheme_host_port($_SERVER).'/u/'.$map->target ?></strong>.</p>
+    <p>Until <strong class="datetime"><?=$expiry->format('c')?></strong> (when it becomes <span class="url">410 Gone</span>), that will redirect to <strong class="url"><?=scheme_host_port($_SERVER).'/'.$map->target ?></strong>.</p>
   </div>
 </body>
-  <?php
+<?php
+} else if ($error) {
+?>
+<body class="error">
+  <div class="error">
+    <p>Oops, something went wrong:</p>
+    <p class="aside"><?= $error_message ?></p>
+  </div>
+</body>
+<?php
 }
 ?>
