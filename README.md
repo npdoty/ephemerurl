@@ -16,3 +16,5 @@ Why? Because users of the Web should have soft limits on sharing as well as hard
 ### Security
 
 I couldn't successfully execute a trivial XSS attack, but I would welcome reports that such attacks are possible or recommendations for code to give stronger assurances that they aren't possible. Proof of concepts are great, but please don't intentionally do harm to users.
+
+There's no app-level protection against denial of service (e.g. authentication or rate-limiting), an attacker could use up all the nice short URLs or create collisions.
