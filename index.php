@@ -61,8 +61,17 @@ if ($path_pieces[2] == "u") { // for paths like /u/abcdef, look up an already ex
   $map = Urlmap::find_by_source($path_pieces[3]);
   if ($map) {
     // TODO: check for expiry
-    header('Location: '.scheme_host_port($_SERVER).'/'.$map->target);
-    exit; // no content after Location headers are sent
+    $exp = new DateTime($map->expiry);
+    
+    if ($exp < new DateTime()) {
+      http_response_code(410);
+      $error = True;
+      $error_message = 'This URL has expired.';
+    } else {
+      http_response_code(307);
+      header('Location: '.scheme_host_port($_SERVER).'/'.$map->target);
+      exit; // no content after Location headers are sent
+    }
   } else {
     http_response_code(404);
     $error = True;
