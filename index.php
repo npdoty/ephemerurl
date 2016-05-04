@@ -55,10 +55,9 @@ function scheme_host_port($server) {
 $success = False;
 $error = False;
 $error_message = '';
-$path_pieces = explode("/", $_SERVER["REQUEST_URI"]); // TODO: replace with a regex
 
-if ($path_pieces[2] == "u") { // for paths like /u/abcdef, look up an already existing record and redirect
-  $map = Urlmap::find_by_source($path_pieces[3]);
+if (preg_match('/\/u\/([a-z]+)/', $_SERVER["REQUEST_URI"], $matches)) { // for paths like /u/abcdef, look up an already existing record and redirect
+  $map = Urlmap::find_by_source($matches[1]);
   if ($map) {
     // TODO: check for expiry
     $exp = new DateTime($map->expiry);
