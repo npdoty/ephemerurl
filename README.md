@@ -6,11 +6,10 @@ Why? Because users of the Web should have soft limits on sharing as well as hard
 
 2. Place the ephemerurl directory on your web server.
 1. Create a sqlite database `urls.db` with a single table `Urlmaps`, with three text columns (`source`, `target`, `expiry`).
-3. Configure a `.htaccess` file to direct all `/u/` and `/until*/` paths to ephemerurl.
+3. Configure a `.htaccess` file to direct all `/u/` and `/until*/` paths to `ephemerurl/index.php`. (See `htaccess.sample`.)
 
 ### TODO
 
-* create .htaccess / mod_rewrite rules
 * create standalone .sql file to create the sqlite database
 
 ### Security
