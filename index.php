@@ -80,7 +80,7 @@ if (preg_match('/\/u\/([a-z]+)/', $_SERVER["REQUEST_URI"], $matches)) { // for p
 ?>
 <!DOCTYPE html>
 <head>
-  <title>npdoty.name ephemerurl</title>
+  <title>ephemerurl</title>
   <style type="text/css" media="screen">
   body {
     font-size: 18px;
@@ -117,6 +117,13 @@ if (preg_match('/\/u\/([a-z]+)/', $_SERVER["REQUEST_URI"], $matches)) { // for p
     border: 3px solid darkred;
     background-color: white;
   }
+  
+  address {
+    text-align: right;
+    #font-size: small;
+    font-style: normal;
+    color: gray;
+  }
   </style>
 </head>
 <?php
@@ -147,6 +154,7 @@ if ($success) {
     <p>Okay, Nick, here's an ephemeral URL you can use:</p>
     <p class="aside"><strong class="url"><?=scheme_host_port($_SERVER).'/u/'.$map->source ?></strong></p>
     <p>Until <strong class="datetime"><?=$expiry->format('c')?></strong> (when it becomes <span class="url">410 Gone</span>), that will redirect to <strong class="url"><?=scheme_host_port($_SERVER).'/'.$map->target ?></strong>.</p>
+    <address>This service is provided by <a href="https://github.com/npdoty/ephemerurl">ephemerurl</a>.</address>
   </div>
 </body>
 <?php
@@ -156,6 +164,7 @@ if ($success) {
   <div class="error">
     <p>Oops, something went wrong:</p>
     <p class="aside"><?= $error_message ?></p>
+    <address>This service is provided by <a href="https://github.com/npdoty/ephemerurl">ephemerurl</a>.</address>
   </div>
 </body>
 <?php
