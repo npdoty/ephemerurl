@@ -5,7 +5,7 @@ Why? Because users of the Web should have soft limits on sharing as well as hard
 ### How To Use
 
 1. Go to a URL at (for example) `https://npdoty.name`.
-2. Add "until6pm/" between the domain and the rest of the URL, e.g. `https://npdoty.name/**until6pm**/test-url`.
+2. Add "until6pm/" between the domain and the rest of the URL, e.g. https://npdoty.name/**until6pm**/test-url.
 3. Get the provided `/u/` URL and share it with your friends -- it'll only work until the specified time.
 
 ### How To Install
