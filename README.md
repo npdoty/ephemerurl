@@ -4,20 +4,20 @@ Why? Because users of the Web should have soft limits on sharing as well as hard
 
 ### How To Use
 
-1. Go to a URL at (for example) `https://npdoty.name`.
-2. Add "until6pm/" between the domain and the rest of the URL, e.g. `https://npdoty.name/until6pm/test-url`.
+1. Go to a URL at `https://npdoty.name`.
+2. Add "/until6pm" between the domain and the rest of the URL, e.g. `https://npdoty.name/until6pm/test-url`.
 3. Get the provided `/u/` URL and share it with your friends -- it'll only work until the specified time.
 
 ### How To Install
 
-2. Place the `ephemerurl` directory on your web server.
-1. Create a sqlite database `urls.db` with a single table `Urlmaps`, with three text columns (`source`, `target`, `expiry`).
+1. Place the `ephemerurl` directory on your web server.
+2. Create a sqlite database `urls.db` with a single table `Urlmaps`, with three text columns (`source`, `target`, `expiry`).
 3. Configure a `.htaccess` file to direct all `/u/` and `/until*/` paths to `ephemerurl/index.php`. (See `htaccess.sample`.)
+4. _Optional:_ add `ephemerurl.js` (or similar) to target pages, to tell users who arrive via this redirection to share the ephemerurl.
 
 ### TODO
 
 * create standalone .sql file to create the sqlite database
-* pass a parameter in the query string to the target page, so that it knows what URL to indicate for sharing
 
 ### Security
 
