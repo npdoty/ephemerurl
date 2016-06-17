@@ -59,7 +59,6 @@ $error_message = '';
 if (preg_match('/\/u\/([a-z]+)/', $_SERVER["REQUEST_URI"], $matches)) { // for paths like /u/abcdef, look up an already existing record and redirect
   $map = Urlmap::find_by_source($matches[1]);
   if ($map) {
-    // TODO: check for expiry
     $exp = new DateTime($map->expiry);
     
     if ($exp < new DateTime()) {
@@ -68,7 +67,14 @@ if (preg_match('/\/u\/([a-z]+)/', $_SERVER["REQUEST_URI"], $matches)) { // for p
       $error_message = 'This URL has expired.';
     } else {
       http_response_code(307);
-      header('Location: '.scheme_host_port($_SERVER).'/'.$map->target);
+
+      $target_path = parse_url($map->target, PHP_URL_PATH);      
+      $target_query_string = parse_url($map->target, PHP_URL_QUERY);
+      parse_str($target_query_string, $target_query_array);
+      $target_query_array['ephemeral_redirect'] = scheme_host_port($_SERVER).$_SERVER["REQUEST_URI"];
+      $new_query_string = http_build_query($target_query_array);
+      
+      header('Location: '.scheme_host_port($_SERVER).'/'.$target_path.'?'.$new_query_string);
       exit; // no content after Location headers are sent
     }
   } else {
