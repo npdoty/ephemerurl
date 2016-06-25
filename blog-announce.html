@@ -1,0 +1,36 @@
+<p>Friends,</p>
+
+<p>I welcome feedback on an experimental feature, exploring ephemerality and URLs, or &#8220;ephemerurls&#8221;. Here&#8217;s the idea: sometimes I&#8217;ve posted something on my website that I want to share with some colleagues, but the thing isn&#8217;t quite finished yet. I might want to post the URL in some forum (an IRC or Slack channel, an archived mailing list, or on Twitter), but I don&#8217;t want the generally accessible URL to be permanently, publicly archived in one of those settings. That is, I want to give out a URL, but the URL should only work temporarily.</p>
+
+<p>Ephemerurl is a service I&#8217;ve built and deployed on my own site. Here&#8217;s how it works. Let&#8217;s say I&#8217;ve been working on a piece of writing, a static HTML page, that I want to share just for a little while for some feedback. Maybe I&#8217;m presenting the in-progress work to a group of people at an in-person or virtual meeting and want to share a link in the group&#8217;s chatroom. Here&#8217;s a screenshot of that page, at its permanent URL:</p>
+
+<p><img src="https://npdoty.name/images/Screen Shot 2016-06-17 at 4.56.34 PM.png" alt="Screen shot of the in-progress page I want to share" title="" style="max-width: 640px;"/></p>
+
+<p>I decide I want to share a link that will only work until 6pm this afternoon. So I change the URL, and add &#8220;/until6pm/&#8221; between &#8220;npdoty.name&#8221; and the rest of the URL. My site responds:</p>
+
+<p><img src="https://npdoty.name/images/Screen Shot 2016-06-17 at 4.57.19 PM.png" alt="Screen shot of the ephemeral URL creation page" title="" style="max-width: 640px;" /></p>
+
+<p><em>&#8220;Okay, Nick, here&#8217;s an ephemeral URL you can use&#8221;</em> Great, I copy and paste this opaque, short URL into the chatroom: <strong><a href="https://npdoty.name/u/vepu">https://npdoty.name/u/vepu</a></strong></p>
+
+<p>Right now, that URL will redirect to the original page. (But if you don&#8217;t see this email until after 6pm my time, you&#8217;ll instead get a 410 Gone error message.) But if the chatroom logs are archived after our meeting (which they often are in groups where I work), the permanent link won&#8217;t be useful.</p>
+
+<p>Of course, if you follow a URL like that, you might not realize that it&#8217;s intended to be a time-boxed URL. So the static page provides a little disclosure to you, letting you know this might not be public, and suggesting that if you share the URL, you use the same ephemeral URL that you received.</p>
+
+<p><img src="https://npdoty.name/images/Screen Shot 2016-06-17 at 4.57.40 PM.png" alt="Screen shot of the landing page with nudge" title="" style="max-width: 640px;" /></p>
+
+<p>This builds on a well-known pattern. <a href="http://privacypatterns.org/patterns/Private-link">Private, &#8220;unguessable&#8221; links</a> are a common way of building in a kind of flexible privacy/access-control into our use of the Web. They&#8217;re examples of <a href="https://www.w3.org/TR/capability-urls/">Capability URLs</a>. Sites will often, when accessing a private or capability URL, provide a warning to the user letting them know about the sharing norms that might apply:</p>
+
+<p><img src="https://npdoty.name/images/Screen Shot 2016-02-08 at 10.50.03 PM.png" alt="YouTube screenshot with warning about private URL" title="" style="max-width: 640px;" /></p>
+
+<p>But ephemerurls also provide a specific, informal ephemerality, another increasingly popular privacy feature. It&#8217;s not effective against a malicious attacker &#8212; if I don&#8217;t want you to see my content or I don&#8217;t trust you to follow some basic norms of sharing, then this feature won&#8217;t stop you, and I&#8217;m not sure anything on the Web really could &#8212; but it uses norms and the way we often share URLs to introduce another layer of control over sharing information. Snapchat is great not because it could somehow prevent a malicious recipient from taking a screenshot, but because it introduces a norm of disappearance, which makes a certain kind of informal sharing easier. </p>
+
+<p>I&#8217;d like to see the same kinds of sharing available on the Web. Disappearing URLs might be one piece, but folks are also talking about easy ways to make social media posts have a pre-determined lifetime where they&#8217;ll automatically disappear.</p>
+
+<p>What do you think? <a href="https://github.com/npdoty/ephemerurl">Code, documentation, issues, etc. on Github</a>. </p>
+
+<p><strong>Update:</strong> it&#8217;s been pointed out (thanks <a href="http://people.ischool.berkeley.edu/~sb/">Seb</a>, <a href="http://www.andrewbadr.com/">Andrew</a>) that while I&#8217;ve built and deployed this for my own domain, it would also make sense to have a standalone service (you know, like <a href="https://bitly.com/">bit.ly</a>) that created ephemeral URLs that could work for any page on the Web without having to install some PHP. It&#8217;s like <a href="https://perma.cc/">perma.cc</a>, but the opposite. See <a href="https://github.com/npdoty/ephemerurl/issues/1">issue #1</a>.</p>
+
+<p>Cheers,<br>
+Nick</p>
+
+<p>P.S. Thanks to the <a href="http://indiewebcamp.com/events/2016-05-04-homebrew-website-club">Homebrew Website Club for their useful feedback</a> when I presented some of this last month.</p>
